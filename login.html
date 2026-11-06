@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>CGO - Autenticación Segura</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+   <header>
+    <div class="nav-container">
+        <a href="index.html" class="brand">
+            <span class="brand-badge">CGO</span>
+            <span>Coalición de Gestión Organizada</span>
+        </a>
+        <nav class="nav-menu" id="navMenu">
+            <a href="index.html">Inicio</a>
+            <a href="reportar.html">Reportar Basura</a>
+            <a href="opiniones.html">Opiniones</a>
+            <a href="login.html">Iniciar Sesión / Registrarse</a>
+        </nav>
+    </div>
+</header>
+    <main class="container" style="display: flex; justify-content: center; align-items: center; min-height: 70vh;">
+        <div class="card" style="width: 100%; max-width: 420px;">
+            
+            <!-- Contenedor de Alertas Dinámicas -->
+            <div id="alerta" style="display: none; padding: 0.75rem; border-radius: 6px; margin-bottom: 1rem; font-size: 0.85rem;"></div>
+
+            <!-- FORMULARIO DE INICIO DE SESIÓN -->
+            <div id="box-login">
+                <h2 style="margin-bottom: 0.5rem; color: var(--primary);">Iniciar Sesión</h2>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">Ingrese sus credenciales operativas.</p>
+                
+                <form onsubmit="manejarLogin(event)">
+                    <div class="form-group">
+                        <label>CORREO ELECTRÓNICO</label>
+                        <input type="email" id="loginEmail" required placeholder="correo@cgo.com">
+                    </div>
+                    <div class="form-group">
+                        <label>CONTRASEÑA</label>
+                        <input type="password" id="loginPass" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="btn">Ingresar al Sistema</button>
+                </form>
+                <p style="text-align: center; margin-top: 1.25rem; font-size: 0.85rem;">
+                    ¿No tienes una cuenta? <a href="#" onclick="alternarFormularios(); return false;" style="color: var(--accent); font-weight: 600; text-decoration: none;">Regístrate</a>
+                </p>
+            </div>
+
+            <!-- FORMULARIO DE REGISTRO -->
+            <div id="box-register" style="display: none;">
+                <h2 style="margin-bottom: 0.5rem; color: var(--primary);">Crear Cuenta</h2>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">Registre sus datos en la base de datos.</p>
+                
+                <form onsubmit="manejarRegistro(event)">
+                    <div class="form-group">
+                        <label>NOMBRE COMPLETO</label>
+                        <input type="text" id="regName" required placeholder="Tu Nombre">
+                    </div>
+                    <div class="form-group">
+                        <label>CORREO ELECTRÓNICO</label>
+                        <input type="email" id="regEmail" required placeholder="correo@ejemplo.com">
+                    </div>
+                    <div class="form-group">
+                        <label>CONTRASEÑA</label>
+                        <input type="password" id="regPass" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="btn">Registrar Cuenta</button>
+                </form>
+                <p style="text-align: center; margin-top: 1.25rem; font-size: 0.85rem;">
+                    ¿Ya estás registrado? <a href="#" onclick="alternarFormularios(); return false;" style="color: var(--accent); font-weight: 600; text-decoration: none;">Inicia sesión</a>
+                </p>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>CGO Enterprise Environment &copy; 2026</p>
+    </footer>
+
+    <script>
+        // Cambiar entre vista de Login y Registro
+        function alternarFormularios() {
+            const cajaLogin = document.getElementById('box-login');
+            const cajaRegistro = document.getElementById('box-register');
+            document.getElementById('alerta').style.display = 'none';
+            
+            if (cajaLogin.style.display === 'none') {
+                cajaLogin.style.display = 'block';
+                cajaRegistro.style.display = 'none';
+            } else {
+                cajaLogin.style.display = 'none';
+                cajaRegistro.style.display = 'block';
+            }
+        }
+
+        // Mostrar mensajes visuales de alerta
+        function mostrarAlerta(texto, esError = true) {
+            const alerta = document.getElementById('alerta');
+            alerta.innerText = texto;
+            alerta.style.display = 'block';
+            alerta.style.background = esError ? '#fee2e2' : '#dcfce7';
+            alerta.style.color = esError ? '#991b1b' : '#166534';
+            alerta.style.border = `1px solid ${esError ? '#fca5a5' : '#86efac'}`;
+        }
+
+        // Registrar un usuario nuevo
+        async function manejarRegistro(evento) {
+            evento.preventDefault();
+            const datosUsuario = {
+                nombre: document.getElementById('regName').value,
+                email: document.getElementById('regEmail').value,
+                password: document.getElementById('regPass').value
+            };
+
+            try {
+                const respuesta = await fetch('http://localhost:3000/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(datosUsuario)
+                });
+
+                const resultado = await respuesta.json();
+
+                if (respuesta.status === 201 || respuesta.status === 200) {
+                    mostrarAlerta("¡Cuenta creada con éxito! Redirigiendo...", false);
+                    localStorage.setItem('cgo_user', datosUsuario.nombre);
+                    setTimeout(() => window.location.href = 'index.html', 1200);
+                } else {
+                    mostrarAlerta(resultado.message || "Ocurrió un error al registrarse.");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                mostrarAlerta("Error al conectar con el servidor Node.js.");
+            }
+        }
+
+        // Iniciar sesión
+        async function manejarLogin(evento) {
+            evento.preventDefault();
+            const credenciales = {
+                email: document.getElementById('loginEmail').value,
+                password: document.getElementById('loginPass').value
+            };
+
+            try {
+                const respuesta = await fetch('http://localhost:3000/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(credenciales)
+                });
+
+                const resultado = await respuesta.json();
+
+                if (respuesta.status === 200) {
+                    localStorage.setItem('cgo_user', resultado.user?.nombre || "Usuario");
+                    window.location.href = 'index.html';
+                } else {
+                    mostrarAlerta(resultado.message || "Credenciales incorrectas.");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                mostrarAlerta("Error al conectar con el servidor Node.js.");
+            }
+        }
+    </script>
+</body>
+</html>

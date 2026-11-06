@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CGO - Comunidad en Gestión Organizada</title>
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+   <header>
+    <div class="nav-container">
+        <a href="index.html" class="brand">
+            <span class="brand-badge">CGO</span>
+            <span>Coalición de Gestión Organizada</span>
+        </a>
+        <nav class="nav-menu" id="navMenu">
+            <a href="index.html">Inicio</a>
+            <a href="reportar.html">Reportar Basura</a>
+            <a href="opiniones.html">Opiniones</a>
+            <a href="login.html">Iniciar Sesión / Registrarse</a>
+        </nav>
+    </div>
+</header>
+    <main class="container">
+        <!-- SECCIÓN HERO / PRESENTACIÓN -->
+        <div class="card" style="text-align: center; padding: 3rem 2rem; margin-bottom: 2rem;">
+            <span class="brand-badge" style="font-size: 0.9rem; display: inline-block; margin-bottom: 1rem;">Iniciativa Ciudadana y Ambiental</span>
+            <h1 id="saludoBienvenida" style="color: var(--primary); margin-bottom: 1rem; font-size: 2.2rem;">Juntos por una Comunidad Limpia y Sostenible</h1>
+            <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 750px; margin: 0 auto 2rem auto;">
+                CGO es una plataforma comunitaria diseñada para erradicar los tiraderos clandestinos, optimizar la gestión de residuos y fomentar la participación activa de todos los vecinos.
+            </p>
+            
+            <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                <a href="reportar.html" class="btn" style="max-width: 250px;">Reportar Tiradero o Basura</a>
+                <a href="#seccionCalificacion" class="btn" style="background: var(--primary); max-width: 250px;">Calificar el Servicio</a>
+            </div>
+        </div>
+
+        <!-- SECCIÓN: PROBLEMÁTICA DE LA BASURA -->
+        <div class="card" style="margin-bottom: 2rem; background: #fafafa;">
+            <h2 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.5rem;">🌍 La Problemática de los Tiraderos Clandestinos</h2>
+            <p style="color: var(--text-dark); line-height: 1.6; margin-bottom: 1rem;">
+                La acumulación descontrolada de basura, escombros y residuos sólidos en esquinas, lotes baldíos y vías públicas genera graves consecuencias para nuestro entorno. Contamina el suelo, bloquea el flujo del agua en temporada de lluvias provocando inundaciones y se convierte en foco de infección por fauna nociva.
+            </p>
+            <p style="color: var(--text-dark); line-height: 1.6;">
+                Recuperar nuestros espacios públicos requiere de organización vecinal, reportes oportunos y una cultura sólida de manejo responsable de nuestros desechos.
+            </p>
+        </div>
+
+        <!-- SECCIÓN: CÓMO AYUDAR A LA COMUNIDAD -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+            
+            <div class="card">
+                <h3 style="color: var(--accent); margin-bottom: 0.75rem;">♻️ Guía para Reducir Tiraderos</h3>
+                <ul style="color: var(--text-muted); padding-left: 1.25rem; line-height: 1.6; font-size: 0.95rem;">
+                    <li><strong>Separación en origen:</strong> Separa tus residuos orgánicos, inorgánicos reciclables y de manejo especial.</li>
+                    <li><strong>Respetar horarios:</strong> Saca tus bolsas de basura únicamente en los días y horarios establecidos por el camión recolector.</li>
+                    <li><strong>Escombros regulados:</strong> No abandones materiales de construcción en la calle; contacta servicios de recolección autorizados.</li>
+                    <li><strong>Participación vecinal:</strong> Organiza faenas de limpieza comunitarias en parques y avenidas principales.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3 style="color: var(--accent); margin-bottom: 0.75rem;">🎯 El Rol de Nuestra Plataforma CGO</h3>
+                <p style="color: var(--text-muted); line-height: 1.5; font-size: 0.95rem; margin-bottom: 1rem;">
+                    Este espacio digital sirve como un canal directo de comunicación ciudadana. Permite registrar con ubicación exacta cada punto crítico de acumulación de basura para que las autoridades y comités vecinales puedan atenderlo con mayor rapidez.
+                </p>
+                <p style="color: var(--text-muted); line-height: 1.5; font-size: 0.95rem;">
+                    Creemos firmemente que la tecnología y la organización ciudadana son las herramientas más poderosas para transformar nuestro entorno.
+                </p>
+            </div>
+
+        </div>
+
+        <!-- SECCIÓN: CALIFICA NUESTRA PÁGINA Y SERVICIO -->
+        <div class="card" id="seccionCalificacion" style="margin-bottom: 2rem;">
+            <h2 style="color: var(--primary); margin-bottom: 0.5rem; font-size: 1.5rem;">⭐ Califica la Página y el Servicio</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Tu opinión es fundamental para mejorar nuestra plataforma comunitaria y el apoyo vecinal.</p>
+
+            <form onsubmit="enviarCalificacion(event)" style="max-width: 600px;">
+                <div class="form-group">
+                    <label>TU NOMBRE O VECINARIO</label>
+                    <input type="text" id="nombreCalifica" required placeholder="Ej. Vecinos Col. Centro">
+                </div>
+
+                <div class="form-group">
+                    <label>CALIFICACIÓN GENERAL (1 AL 5 ESTRELLAS)</label>
+                    <select id="estrellas">
+                        <option value="★★★★★ (5/5) - Excelente iniciativa">★★★★★ (5/5) - Excelente iniciativa</option>
+                        <option value="★★★★☆ (4/5) - Muy útil">★★★★☆ (4/5) - Muy útil</option>
+                        <option value="★★★☆☆ (3/5) - Regular, puede mejorar">★★★☆☆ (3/5) - Regular, puede mejorar</option>
+                        <option value="★★☆☆☆ (2/5) - Poco útil">★★☆☆☆ (2/5) - Poco útil</option>
+                        <option value="★☆☆☆☆ (1/5) - Mal servicio">★☆☆☆☆ (1/5) - Mal servicio</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>COMENTARIOS O SUGERENCIAS</label>
+                    <textarea id="comentario" rows="3" required placeholder="Escribe aquí tu opinión sobre la página o propuestas para mejorar la recolección..."></textarea>
+                </div>
+
+                <button type="submit" class="btn">Enviar Opinión</button>
+            </form>
+
+            <div style="margin-top: 2rem;">
+                <h3 style="color: var(--primary); font-size: 1.2rem; margin-bottom: 1rem;">💬 Opiniones Recientes de la Comunidad</h3>
+                <div id="listaComentarios" style="display: flex; flex-direction: column; gap: 1rem;">
+                    <!-- Se llenará dinámicamente con las opiniones de los usuarios -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>CGO Comunidad Sostenible &copy; 2026 - Unidos por un entorno limpio</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const usuarioActivo = localStorage.getItem("cgo_user");
+            const navMenu = document.getElementById("navMenu");
+            const saludo = document.getElementById("saludoBienvenida");
+
+            if (usuarioActivo) {
+                saludo.innerText = `Bienvenido de nuevo, ${usuarioActivo}`;
+                navMenu.innerHTML = `
+                    <span style="color: var(--white); font-size: 0.9rem;">👤 ${usuarioActivo}</span>
+                    <a href="reportar.html">Reportar Basura</a>
+                    <a href="#" onclick="cerrarSesion(); return false;" style="color: #fca5a5;">Cerrar Sesión</a>
+                `;
+            } else {
+                navMenu.innerHTML = `
+                    <a href="login.html">Iniciar Sesión / Registrarse</a>
+                `;
+            }
+
+            // Cargar opiniones guardadas localmente
+            mostrarComentarios();
+        });
+
+        function enviarCalificacion(e) {
+            e.preventDefault();
+            const nombre = document.getElementById('nombreCalifica').value;
+            const estrellas = document.getElementById('estrellas').value;
+            const texto = document.getElementById('comentario').value;
+
+            const nuevaOpinion = {
+                nombre,
+                estrellas,
+                texto,
+                fecha: new Date().toLocaleDateString()
+            };
+
+            let opiniones = JSON.parse(localStorage.getItem('cgo_opiniones')) || [];
+            opiniones.unshift(nuevaOpinion); // Agregar al inicio
+            localStorage.setItem('cgo_opiniones', JSON.stringify(opiniones));
+
+            alert("¡Muchas gracias por tu calificación y comentarios!");
+            document.getElementById('nombreCalifica').value = '';
+            document.getElementById('comentario').value = '';
+            mostrarComentarios();
+        }
+
+        function mostrarComentarios() {
+            const contenedor = document.getElementById('listaComentarios');
+            let opiniones = JSON.parse(localStorage.getItem('cgo_opiniones')) || [];
+
+            if (opiniones.length === 0) {
+                contenedor.innerHTML = `<p style="color: var(--text-muted); font-size: 0.9rem; font-style: italic;">Aún no hay opiniones registradas. ¡Sé el primero en calificar el servicio!</p>`;
+                return;
+            }
+
+            contenedor.innerHTML = '';
+            opiniones.forEach(op => {
+                contenedor.innerHTML += `
+                    <div style="background: #f8fafc; border: 1px solid var(--border); padding: 1rem; border-radius: 8px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <strong style="color: var(--primary); font-size: 0.95rem;">${op.nombre}</strong>
+                            <span style="font-size: 0.8rem; color: var(--text-muted);">${op.fecha}</span>
+                        </div>
+                        <p style="color: var(--accent); font-weight: 600; font-size: 0.85rem; margin-bottom: 0.5rem;">${op.estrellas}</p>
+                        <p style="color: var(--text-dark); font-size: 0.9rem; line-height: 1.4;">"${op.texto}"</p>
+                    </div>
+                `;
+            });
+        }
+
+        function cerrarSesion() {
+            localStorage.removeItem("cgo_user");
+            alert("Sesión cerrada correctamente.");
+            window.location.reload();
+        }
+    </script>
+</body>
+</html>

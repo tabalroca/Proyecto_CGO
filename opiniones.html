@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CGO - Opiniones y Valoración Comunitaria</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+    <div class="nav-container">
+        <a href="index.html" class="brand">
+            <span class="brand-badge">CGO</span>
+            <span>Coalición de Gestión Organizada</span>
+        </a>
+        <nav class="nav-menu" id="navMenu">
+            <a href="index.html">Inicio</a>
+            <a href="reportar.html">Reportar Basura</a>
+            <a href="opiniones.html">Opiniones</a>
+            <a href="login.html">Iniciar Sesión / Registrarse</a>
+        </nav>
+    </div>
+</header>
+    <main class="container">
+        <!-- CABECERA DE LA SECCIÓN -->
+        <div class="card" style="text-align: center; padding: 3rem 2rem; margin-bottom: 2rem;">
+            <span class="brand-badge" style="font-size: 0.9rem; display: inline-block; margin-bottom: 1rem;">Voz Vecinal y Evaluación</span>
+            <h1 style="color: var(--primary); margin-bottom: 1rem; font-size: 2.2rem;">Opiniones y Valoración de la Plataforma</h1>
+            <p style="color: var(--text-muted); font-size: 1.05rem; max-width: 700px; margin: 0 auto;">
+                Tu experiencia e impresiones nos ayudan a impulsar una plataforma más rápida, eficiente y comprometida con el saneamiento de nuestras calles.
+            </p>
+        </div>
+
+        <!-- TARJETAS DE SATISFACCIÓN Y PROMEDIO -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+            <div class="card" style="text-align: center; padding: 1.5rem;">
+                <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Satisfacción General</p>
+                <h3 id="promedioEstrellas" style="font-size: 2.2rem; color: var(--accent); margin-top: 0.5rem;">5.0 / 5.0</h3>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">★★★★★</p>
+            </div>
+            <div class="card" style="text-align: center; padding: 1.5rem;">
+                <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Opiniones Recibidas</p>
+                <h3 id="totalOpiniones" style="font-size: 2.2rem; color: var(--primary); margin-top: 0.5rem;">0</h3>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">Comentarios registrados</p>
+            </div>
+            <div class="card" style="text-align: center; padding: 1.5rem;">
+                <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Compromiso Vecinal</p>
+                <h3 style="font-size: 2.2rem; color: var(--accent); margin-top: 0.5rem;">100%</h3>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">Participación activa</p>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+            
+            <!-- FORMULARIO DE EVALUACIÓN -->
+            <div class="card">
+                <h2 style="color: var(--primary); margin-bottom: 0.5rem; font-size: 1.4rem;">⭐ Deja tu Evaluación</h2>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">Califícanos y déjanos tus comentarios sobre el servicio o la interfaz.</p>
+
+                <form onsubmit="guardarOpinion(event)">
+                    <div class="form-group">
+                        <label>NOMBRE O COMUNIDAD</label>
+                        <input type="text" id="autor" required placeholder="Ej. Carlos Mendoza / Vecinos Tecámac">
+                    </div>
+
+                    <div class="form-group">
+                        <label>CALIFICACIÓN</label>
+                        <select id="puntuacion">
+                            <option value="5">★★★★★ (5/5) Excelente servicio e iniciativa</option>
+                            <option value="4">★★★★☆ (4/5) Muy buena plataforma</option>
+                            <option value="3">★★★☆☆ (3/5) Aceptable, con áreas de mejora</option>
+                            <option value="2">★★☆☆☆ (2/5) Regular</option>
+                            <option value="1">★☆☆☆☆ (1/5) Necesita cambios urgentes</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>OPINIÓN DETALLADA</label>
+                        <textarea id="mensaje" rows="4" required placeholder="¿Qué te pareció la atención de reportes o el diseño de la página?"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn">Publicar Calificación</button>
+                </form>
+            </div>
+
+            <!-- MURO DE OPINIONES RECIENTES -->
+            <div class="card">
+                <h2 style="color: var(--primary); margin-bottom: 0.5rem; font-size: 1.4rem;">💬 Testimonios de los Usuarios</h2>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">Comentarios publicados en tiempo real por la comunidad.</p>
+
+                <div id="contenedorOpiniones" style="display: flex; flex-direction: column; gap: 1rem; max-height: 480px; overflow-y: auto; padding-right: 5px;">
+                    <!-- Se carga mediante JavaScript -->
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>CGO Comunidad Sostenible &copy; 2026 - Transparencia y Participación Ciudadana</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            cargarOpiniones();
+        });
+
+        function guardarOpinion(e) {
+            e.preventDefault();
+
+            const autor = document.getElementById('autor').value;
+            const puntuacion = parseInt(document.getElementById('puntuacion').value);
+            const mensaje = document.getElementById('mensaje').value;
+
+            const nuevaOpinion = {
+                autor,
+                puntuacion,
+                mensaje,
+                fecha: new Date().toLocaleDateString('es-MX', { year: 'numeric', month: 'short', day: 'numeric' })
+            };
+
+            let lista = JSON.parse(localStorage.getItem('cgo_opiniones_comunidad')) || obtenerOpinionesIniciales();
+            lista.unshift(nuevaOpinion);
+            localStorage.setItem('cgo_opiniones_comunidad', JSON.stringify(lista));
+
+            alert("¡Gracias por compartir tu opinión con la comunidad de CGO!");
+            document.getElementById('autor').value = '';
+            document.getElementById('mensaje').value = '';
+            
+            cargarOpiniones();
+        }
+
+        function cargarOpiniones() {
+            let lista = JSON.parse(localStorage.getItem('cgo_opiniones_comunidad')) || obtenerOpinionesIniciales();
+            
+            // Si es la primera vez, guardamos las iniciales para tener contenido de demostración
+            if (!localStorage.getItem('cgo_opiniones_comunidad')) {
+                localStorage.setItem('cgo_opiniones_comunidad', JSON.stringify(lista));
+            }
+
+            const contenedor = document.getElementById('contenedorOpiniones');
+            contenedor.innerHTML = '';
+
+            let sumaPuntos = 0;
+
+            lista.forEach(op => {
+                sumaPuntos += op.puntuacion;
+                const estrellasTexto = '★'.repeat(op.puntuacion) + '☆'.repeat(5 - op.puntuacion);
+                
+                contenedor.innerHTML += `
+                    <div style="background: #f8fafc; border: 1px solid var(--border); padding: 1.25rem; border-radius: 8px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <strong style="color: var(--primary); font-size: 0.95rem;">${op.autor}</strong>
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">${op.fecha}</span>
+                        </div>
+                        <p style="color: #f59e0b; font-size: 0.9rem; font-weight: bold; margin-bottom: 0.5rem;">${estrellasTexto} (${op.puntuacion}/5)</p>
+                        <p style="color: var(--text-dark); font-size: 0.9rem; line-height: 1.5;">"${op.mensaje}"</p>
+                    </div>
+                `;
+            });
+
+            // Actualizar Métricas
+            document.getElementById('totalOpiniones').innerText = lista.length;
+            const promedio = (sumaPuntos / lista.length).toFixed(1);
+            document.getElementById('promedioEstrellas').innerText = `${promedio} / 5.0`;
+        }
+
+        // Opiniones de demostración para iniciar el muro con contenido real
+        function obtenerOpinionesIniciales() {
+            return [
+                {
+                    autor: "María Fernández",
+                    puntuacion: 5,
+                    mensaje: "Excelente plataforma. El mapa interactivo facilita mucho marcar exactamente dónde están los escombros tirados.",
+                    fecha: "02 nov 2026"
+                },
+                {
+                    autor: "Comité Vecinal Sector 3",
+                    puntuacion: 5,
+                    mensaje: "Muy útil para mantener organizada la colonia. Hacía falta un espacio así para denunciar tiraderos sin complicaciones.",
+                    fecha: "28 oct 2026"
+                }
+            ];
+        }
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            cargarOpinionesDesdeBD();
+        });
+
+        async function guardarOpinion(e) {
+            e.preventDefault();
+
+            const autor = document.getElementById('autor').value;
+            const puntuacion = parseInt(document.getElementById('puntuacion').value);
+            const mensaje = document.getElementById('mensaje').value;
+
+            const nuevaOpinion = { autor, puntuacion, mensaje };
+
+            try {
+                const respuesta = await fetch('http://localhost:3000/api/opiniones', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(nuevaOpinion)
+                });
+
+                const resultado = await respuesta.json();
+
+                if (resultado.success) {
+                    alert("¡Gracias por compartir tu opinión con la comunidad de CGO!");
+                    document.getElementById('autor').value = '';
+                    document.getElementById('mensaje').value = '';
+                    cargarOpinionesDesdeBD();
+                } else {
+                    alert("Error al registrar la opinión.");
+                }
+            } catch (error) {
+                console.error("Error de conexión:", error);
+                alert("No se pudo conectar con el servidor backend.");
+            }
+        }
+
+        async function cargarOpinionesDesdeBD() {
+            try {
+                const respuesta = await fetch('http://localhost:3000/api/opiniones');
+                const resultado = await respuesta.json();
+
+                const contenedor = document.getElementById('contenedorOpiniones');
+                contenedor.innerHTML = '';
+
+                if (!resultado.success || resultado.data.length === 0) {
+                    contenedor.innerHTML = `<p style="color: var(--text-muted); font-size: 0.9px;">Aún no hay opiniones registradas en la base de datos.</p>`;
+                    return;
+                }
+
+                let sumaPuntos = 0;
+                resultado.data.forEach(op => {
+                    sumaPuntos += op.puntuacion;
+                    const estrellasTexto = '★'.repeat(op.puntuacion) + '☆'.repeat(5 - op.puntuacion);
+                    const inicial = op.autor.charAt(0).toUpperCase();
+                    
+                    // Formatear la fecha que viene de MySQL
+                    const fechaFormateada = new Date(op.fecha_opinion).toLocaleDateString('es-MX', { year: 'numeric', month: 'short', day: 'numeric' });
+
+                    contenedor.innerHTML += `
+                        <div class="review-card">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div class="user-avatar">${inicial}</div>
+                                    <div>
+                                        <strong style="color: var(--primary); font-size: 0.95rem; display: block; line-height: 1.2;">${op.autor}</strong>
+                                        <span style="font-size: 0.75rem; color: var(--text-muted);">${fechaFormateada}</span>
+                                    </div>
+                                </div>
+                                <span class="stars-glow" style="font-size: 0.85rem;">${estrellasTexto}</span>
+                            </div>
+                            <p style="color: var(--text-dark); font-size: 0.9rem; line-height: 1.5; margin: 0;">"${op.mensaje}"</p>
+                        </div>
+                    `;
+                });
+
+                document.getElementById('totalOpiniones').innerText = resultado.data.length;
+                const promedio = (sumaPuntos / resultado.data.length).toFixed(1);
+                document.getElementById('promedioEstrellas').innerText = `${promedio} / 5.0`;
+
+            } catch (error) {
+                console.error("Error al cargar opiniones:", error);
+            }
+        }
+    </script>
+</body>
+</html>

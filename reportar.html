@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CGO - Nuevo Reporte de Incidencia</title>
+
+    <!-- Tu archivo CSS principal -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- CSS de Leaflet para el Mapa Interactivo -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="brand">
+                <span class="brand-badge">CGO</span>
+                <span>Coalición de Gestión Organizada</span>
+            </a>
+            <nav class="nav-menu" id="navMenu">
+                <a href="index.html">Inicio</a>
+                <a href="reportar.html">Reportar Basura</a>
+                <a href="opiniones.html">Opiniones</a>
+                <a href="login.html">Iniciar Sesión / Registrarse</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container" style="max-width: 900px; margin: 2rem auto;">
+        <div class="card">
+            <h1 style="color: var(--primary); margin-bottom: 0.5rem; font-size: 1.8rem;">Despliegue de Reporte Urbano</h1>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
+                Haga clic sobre el mapa interactivo para marcar la coordenada exacta de la incidencia.
+            </p>
+
+            <form onsubmit="enviarReporte(event)">
+                <!-- SELECCIÓN DE RESIDUO -->
+                <div class="form-group">
+                    <label>TIPO DE RESIDUO / MATERIAL</label>
+                    <select id="tipoResiduo">
+                        <option value="Escombros de Construcción">Escombros de Construcción / Material Pétreo</option>
+                        <option value="Residuos Sólidos Urbanos">Residuos Sólidos Urbanos (Basura Doméstica)</option>
+                        <option value="Desechos Voluminosos">Desechos Voluminosos (Muebles / Llantas)</option>
+                        <option value="Otros">Otros Desechos Clandestinos</option>
+                    </select>
+                </div>
+
+                <!-- MAPA INTERACTIVO -->
+                <div class="form-group">
+                    <label>UBICACIÓN GEOGRÁFICA (MAPA INTERACTIVO)</label>
+                    <div id="map"></div>
+                </div>
+
+                <!-- COORDENADAS GPS -->
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>LATITUD</label>
+                        <input type="text" id="lat" readonly placeholder="Haga clic en el mapa" style="background: #f1f5f9;">
+                    </div>
+                    <div class="form-group">
+                        <label>LONGITUD</label>
+                        <input type="text" id="lng" readonly placeholder="Haga clic en el mapa" style="background: #f1f5f9;">
+                    </div>
+                </div>
+
+                <!-- DETALLES DE DIRECCIÓN -->
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>CALLE O AVENIDA</label>
+                        <input type="text" id="calle" required placeholder="Ej. Av. Central Esquina Calle 4">
+                    </div>
+                    <div class="form-group">
+                        <label>MUNICIPIO</label>
+                        <input type="text" id="municipio" value="Tecámac" required placeholder="Ej. Tecámac">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>TIPO DE ZONA</label>
+                    <select id="tipoLugar">
+                        <option value="Vía Pública">Vía Pública / Banqueta</option>
+                        <option value="Lote Baldío">Lote Baldío / Terreno Abandonado</option>
+                        <option value="Canal / Río">Canal de Riego / Río</option>
+                        <option value="Parque / Área Verde">Parque o Área Verde</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>REFERENCIA ADICIONAL</label>
+                    <textarea id="referencia" rows="3" placeholder="Puntos de referencia cercanos (ej. frente a la tienda de la esquina)..."></textarea>
+                </div>
+
+                <button type="submit" class="btn">Registrar Incidencia en Base de Datos</button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <p>CGO Enterprise Environment &copy; 2026</p>
+    </footer>
+
+    <!-- JavaScript de Leaflet para el Mapa -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        let map;
+        let marker;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // Coordenadas iniciales (Tecámac / Ojo de Agua)
+            const latInicial = 19.6833;
+            const lngInicial = -99.0167;
+
+            // Inicializar el mapa
+            map = L.map('map').setView([latInicial, lngInicial], 13);
+
+            // Capa de OpenStreetMap
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Marcador inicial
+            marker = L.marker([latInicial, lngInicial], { draggable: true }).addTo(map);
+
+            // Actualizar campos al arrastrar el marcador
+            actualizarCoordenadas(latInicial, lngInicial);
+
+            marker.on('dragend', function (e) {
+                const pos = marker.getLatLng();
+                actualizarCoordenadas(pos.lat, pos.lng);
+            });
+
+            // Actualizar marcador al hacer clic en cualquier punto del mapa
+            map.on('click', function (e) {
+                const lat = e.latlng.lat;
+                const lng = e.latlng.lng;
+                marker.setLatLng([lat, lng]);
+                actualizarCoordenadas(lat, lng);
+            });
+        });
+
+        function actualizarCoordenadas(lat, lng) {
+            document.getElementById('lat').value = lat.toFixed(6);
+            document.getElementById('lng').value = lng.toFixed(6);
+        }
+
+        async function enviarReporte(e) {
+            e.preventDefault();
+
+            const usuarioActivo = localStorage.getItem('cgo_user') || 'Anonimo';
+            const datosReporte = {
+                solicitante: usuarioActivo,
+                tipoResiduo: document.getElementById('tipoResiduo').value,
+                calle: document.getElementById('calle').value,
+                municipio: document.getElementById('municipio').value,
+                tipoLugar: document.getElementById('tipoLugar').value,
+                lat: document.getElementById('lat').value,
+                lng: document.getElementById('lng').value,
+                referencia: document.getElementById('referencia').value
+            };
+
+            if (!datosReporte.lat || !datosReporte.lng) {
+                alert("Por favor seleccione un punto en el mapa.");
+                return;
+            }
+
+            try {
+                const respuesta = await fetch('http://localhost:3000/api/reportes', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(datosReporte)
+                });
+
+                const resultado = await respuesta.json();
+
+                if (respuesta.status === 201 || resultado.success) {
+                    alert("¡Reporte de incidencia guardado con éxito en la base de datos!");
+                    window.location.href = 'index.html';
+                } else {
+                    alert(resultado.message || "Error al registrar el reporte.");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Error al conectar con el servidor Node.js.");
+            }
+        }
+    </script>
+</body>
+</html>
